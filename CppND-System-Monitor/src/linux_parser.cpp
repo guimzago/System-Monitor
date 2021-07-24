@@ -253,7 +253,7 @@ string LinuxParser::User(int pid) {
 long LinuxParser::UpTime(int pid) { 
   string line;
   string uptime;
-  long uptime_long;
+  //long uptime_long;
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
   if (filestream.is_open()) {
     while (std::getline(filestream, line)) {
@@ -263,8 +263,13 @@ long LinuxParser::UpTime(int pid) {
       }     
     }
   }
-  uptime_long = stol(uptime);
-  return (uptime_long / sysconf(_SC_CLK_TCK));  
+  
+  //as said in review, the calculation was wrong.
+  //uptime_long = stol(uptime);
+  //return (uptime_long / sysconf(_SC_CLK_TCK));  
+  
+  int upTimePid = UpTime() - stol(uptime)/sysconf(_SC_CLK_TCK);
+  return upTimePid;  
 }
 
 /* contagem começãndo do 1
